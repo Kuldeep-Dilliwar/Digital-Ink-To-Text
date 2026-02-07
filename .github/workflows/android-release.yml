@@ -40,6 +40,7 @@ jobs:
       # We pass the passwords here so Gradle can sign the APKs while building
       - name: Build Release APKs
         env:
+          BUILD_VERSION_NAME: ${{ github.ref_name }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
