@@ -215,7 +215,7 @@ class HandwritingViewModel : ViewModel() {
         val selection = textFieldValue.selection
         val start = if (selection.start < 0) 0 else selection.start
         val end = if (selection.end < 0) 0 else selection.end
-        val newText = currentText.substring(0, start) + textToInsert + currentText.substring(end)
+        val newText = currentText.take(start) + textToInsert + currentText.substring(end)
         val newCursorPosition = start + textToInsert.length
 
         textFieldValue = TextFieldValue(newText, TextRange(newCursorPosition))
@@ -548,7 +548,7 @@ fun HandwritingApp(
                             MotionEvent.ACTION_MOVE -> {
                                 val x2 = (x + motionEventX) / 2
                                 val y2 = (y + motionEventY) / 2
-                                currentPath.quadraticBezierTo(motionEventX, motionEventY, x2, y2)
+                                currentPath.quadraticTo(motionEventX, motionEventY, x2, y2)
                                 motionEventX = x
                                 motionEventY = y
                                 activeStrokeBuilder?.addPoint(Ink.Point.create(x, y, t))
@@ -571,7 +571,7 @@ fun HandwritingApp(
                     }
             ) {
                 Canvas(modifier = Modifier.fillMaxSize()) {
-                    val unused = triggerRedraw
+                    triggerRedraw
                     val strokeStyle = Stroke(width = 12f, cap = StrokeCap.Round, join = StrokeJoin.Round)
                     val inkColor = if (isDarkTheme) Color.White else Color.Black
                     viewModel.paths.forEach { drawPath(it, color = inkColor, style = strokeStyle) }
